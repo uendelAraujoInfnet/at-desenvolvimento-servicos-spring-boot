@@ -19,22 +19,14 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final ProfessorRepository professorRepository;
-
-    public SecurityConfig(ProfessorRepository professorRepository) {
-        this.professorRepository = professorRepository;
-    }
-
     @Bean
-    public UserDetailsService userDetailsService() {
-        return username -> {
-            Professor professor = professorRepository.findByUsername(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("Professor not found ( Professor não encontrado)"));
-            return User.withUsername(professor.getUsername())
-                    .password(professor.getPassword())
-                    .roles("PROFESSOR")
-                    .build();
-        };
+    public UserDetailsService userDetailsService(ProfessorRepository professorRepository) {
+        return username -> professorRepository.findByUsername(username)
+                .map(professor -> User.withUsername(professor.getUsername())
+                        .password(professor.getPassword())
+                        .roles("PROFESSOR")
+                        .build()).orElseThrow(() ->
+                        new UsernameNotFoundException("Professor not found ( Professor não encontrado)"));
     }
 
     @Bean
@@ -43,7 +35,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                 auth.requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/professors").permitAll()
-                        .anyRequest().authenticated()).httpBasic(Customizer.withDefaults());
+                        .anyRequest().authenticated()).httpBasic(Customizer.withDefaults())
+                        .cors(Customizer.withDefaults());
 
         http.headers(headers -> headers
                 .frameOptions(frame -> frame.sameOrigin()));
