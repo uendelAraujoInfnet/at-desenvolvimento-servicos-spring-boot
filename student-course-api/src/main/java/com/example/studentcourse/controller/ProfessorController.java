@@ -1,5 +1,6 @@
 package com.example.studentcourse.controller;
 
+import com.example.studentcourse.dto.ProfessorDTO;
 import com.example.studentcourse.model.Professor;
 import com.example.studentcourse.service.ProfessorService;
 import jakarta.validation.Valid;
@@ -18,14 +19,18 @@ public class ProfessorController {
     }
 
     @PostMapping
-    public ResponseEntity<Professor> create(@RequestBody Professor professor) {
+    public ResponseEntity<Professor> create(@Valid @RequestBody ProfessorDTO professorDTO) {
+        Professor professor = new Professor(professorDTO.username, professorDTO.password, professorDTO.nome);
         Professor createdProfessor = professorService.create(professor);
+        createdProfessor.setPassword(professorDTO.password);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProfessor);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Professor>  update(@PathVariable Long id, @Valid @RequestBody Professor professor) {
-        Professor  updatedProfessor = professorService.update(id, professor);
+    public ResponseEntity<Professor>  update(@PathVariable Long id, @Valid @RequestBody ProfessorDTO professorDTO) {
+        Professor professor = new Professor(professorDTO.username, professorDTO.password, professorDTO.nome);
+        Professor updatedProfessor = professorService.update(id, professor);
+        updatedProfessor.setPassword(professorDTO.password);
         return ResponseEntity.ok(updatedProfessor);
     }
 

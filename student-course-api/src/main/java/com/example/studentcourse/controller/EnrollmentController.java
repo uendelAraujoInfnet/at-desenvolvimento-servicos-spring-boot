@@ -1,7 +1,10 @@
 package com.example.studentcourse.controller;
 
+import com.example.studentcourse.dto.EnrollmentDTO;
+import com.example.studentcourse.dto.GradeDTO;
 import com.example.studentcourse.model.Enrollment;
 import com.example.studentcourse.model.Student;
+import com.example.studentcourse.repository.EnrollmentRepository;
 import com.example.studentcourse.service.EnrollmentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,24 +18,28 @@ import java.util.Map;
 public class EnrollmentController {
 
     private final EnrollmentService enrollmentService;
+    private final EnrollmentRepository enrollmentRepository;
 
-    public EnrollmentController(EnrollmentService enrollmentService) {
+    public EnrollmentController(EnrollmentService enrollmentService,  EnrollmentRepository enrollmentRepository) {
         this.enrollmentService = enrollmentService;
+        this.enrollmentRepository = enrollmentRepository;
     }
 
     @PostMapping
-    public ResponseEntity<Enrollment> enroll(@RequestBody Map<String, Long> payload) {
-        Long studentId = payload.get("studentId");
-        Long subjectId = payload.get("subjectId");
-        Enrollment enrollment = enrollmentService.enroll(studentId, subjectId);
+    public ResponseEntity<Enrollment> enroll(@RequestBody EnrollmentDTO enrollmentDTO) {
+        Enrollment enrollment = enrollmentService.enroll(enrollmentDTO.studentId, enrollmentDTO.subjectId);
         return ResponseEntity.status(HttpStatus.CREATED).body(enrollment);
     }
 
     @PutMapping("/{id}/grade")
-    public ResponseEntity<Enrollment> grade(@PathVariable Long id, @RequestBody Map<String, Double> payload) {
-        Double grade = payload.get("grade");
-        Enrollment enrollment = enrollmentService.setGrade(id, grade);
+    public ResponseEntity<Enrollment> grade(@PathVariable Long id, @RequestBody GradeDTO gradeDTO) {
+        Enrollment enrollment = enrollmentService.setGrade(id, gradeDTO.grade);
         return ResponseEntity.ok(enrollment);
+    }
+
+    @GetMapping
+    public List<Enrollment> findAll() {
+        return enrollmentRepository.findAll();
     }
 
     @GetMapping("/subject/{subjectId}/approved")
@@ -46,10 +53,8 @@ public class EnrollmentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Enrollment> update(@PathVariable Long id, @RequestBody Map<String, Long> payload){
-        Long studentId = payload.get("studentId");
-        Long subjectId = payload.get("subjectId");
-        Enrollment updated = enrollmentService.updateEnrollment(id, studentId, subjectId);
+    public ResponseEntity<Enrollment> update(@PathVariable Long id, @RequestBody EnrollmentDTO enrollmentDTO){
+        Enrollment updated = enrollmentService.updateEnrollment(id, enrollmentDTO.studentId, enrollmentDTO.subjectId);
         return ResponseEntity.ok(updated);
     }
 

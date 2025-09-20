@@ -1,5 +1,6 @@
 package com.example.studentcourse.controller;
 
+import com.example.studentcourse.dto.SubjectDTO;
 import com.example.studentcourse.model.Subject;
 import com.example.studentcourse.service.SubjectService;
 import jakarta.validation.Valid;
@@ -20,7 +21,8 @@ public class SubjectController {
     }
 
     @PostMapping
-    public ResponseEntity<Subject> create(@Valid @RequestBody Subject subject) {
+    public ResponseEntity<Subject> create(@Valid @RequestBody SubjectDTO subjectDTO) {
+        Subject subject = new Subject(subjectDTO.nome, subjectDTO.codigo);
         Subject createdSubject = subjectService.create(subject);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSubject);
     }
@@ -37,7 +39,8 @@ public class SubjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Subject> update(@PathVariable Long id, @Valid @RequestBody Subject subject) {
+    public ResponseEntity<Subject> update(@PathVariable Long id, @Valid @RequestBody SubjectDTO subjectDTO) {
+        Subject subject = new Subject(subjectDTO.nome, subjectDTO.codigo);
         Subject updatedSubject = subjectService.update(id, subject);
         return ResponseEntity.ok(updatedSubject);
     }
