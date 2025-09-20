@@ -20,10 +20,17 @@ public class Student {
     private String email;
 
     private String telefone;
-
     private String endereco;
 
     public Student() {}
+
+    public Student(String nome, String cpf, String email, String telefone, String endereco) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.email = email;
+        this.telefone = telefone;
+        this.endereco = endereco;
+    }
 
     public Student(Long id, String nome, String cpf, String email, String telefone, String endereco) {
         this.id = id;

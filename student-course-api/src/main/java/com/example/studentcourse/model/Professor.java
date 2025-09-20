@@ -12,6 +12,7 @@ public class Professor {
     private Long id;
 
     @NotBlank
+    @Column(nullable = false, unique = true)
     private String username;
 
     @NotBlank
@@ -20,6 +21,12 @@ public class Professor {
     private String nome;
 
     public Professor() {}
+
+    public Professor(String username, String password, String nome) {
+        this.username = username;
+        this.password = password;
+        this.nome = nome;
+    }
 
     public Professor(Long id, String username, String password, String nome) {
         this.id = id;

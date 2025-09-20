@@ -19,6 +19,11 @@ public class Subject {
 
     public Subject() {}
 
+    public Subject(String nome, String codigo) {
+        this.nome = nome;
+        this.codigo = codigo;
+    }
+
     public Subject(Long id, String nome, String codigo) {
         this.id = id;
         this.nome = nome;

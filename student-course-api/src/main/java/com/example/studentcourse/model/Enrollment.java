@@ -1,6 +1,5 @@
 package com.example.studentcourse.model;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,17 +11,24 @@ public class Enrollment {
     private Long id;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "student_id")
     private Student student;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "subject_id")
     private Subject subject;
 
-    @Nullable
     private Double grade;
 
     public Enrollment() {}
 
-    public Enrollment(Long id, Student student, Subject subject, @Nullable Double grade) {
+    public Enrollment(Student student, Subject subject) {
+        this.id = id;
+        this.student = student;
+        this.subject = subject;
+    }
+
+    public Enrollment(Long id, Student student, Subject subject, Double grade) {
         this.id = id;
         this.student = student;
         this.subject = subject;
@@ -53,12 +59,11 @@ public class Enrollment {
         this.subject = subject;
     }
 
-    @Nullable
     public Double getGrade() {
         return grade;
     }
 
-    public void setGrade(@Nullable Double grade) {
+    public void setGrade(Double grade) {
         this.grade = grade;
     }
 }
