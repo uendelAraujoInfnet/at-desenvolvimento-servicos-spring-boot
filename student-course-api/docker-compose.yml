@@ -41,7 +41,6 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # frontend opcional (comentar se for rodar localmente com npm dev)
   # frontend:
   #   build:
   #     context: ./frontend
