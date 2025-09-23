@@ -61,7 +61,7 @@ export default function Students({ auth }) {
 
     return (
         <div style={{border:'1px solid #ddd', padding:10, marginTop:10}}>
-            <h2>Students</h2>
+            <h2>Alunos</h2>
             <Notification message={note?.message} type={note?.type} onClose={() => setNote(null)} />
             <div style={{display:'flex', gap:8, flexWrap:'wrap', marginBottom:8}}>
                 <input placeholder="Nome" value={form.nome} onChange={e=>setForm({...form, nome:e.target.value})}/>

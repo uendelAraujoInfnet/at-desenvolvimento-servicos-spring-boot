@@ -1,26 +1,27 @@
-// frontend/src/App.jsx
-import React, { useState, useEffect } from 'react'
+
+import React, { useState } from 'react'
 import Login from './pages/Login'
+import DefaultLayout from './layouts/DefaultLayout'
 import Dashboard from './pages/Dashboard'
 
 export default function App(){
-
-    const stored = typeof window !== 'undefined' ? localStorage.getItem('auth') : null
+    const stored = localStorage.getItem('auth')
     const [auth, setAuth] = useState(stored ? JSON.parse(stored) : null)
 
-    useEffect(() => {
-        if(auth) localStorage.setItem('auth', JSON.stringify(auth))
-        else localStorage.removeItem('auth')
-    }, [auth])
+    const onLogin = (a) => {
+        setAuth(a)
+        localStorage.setItem('auth', JSON.stringify(a))
+    }
 
     return (
-        <div style={{padding:20,fontFamily:'Arial'}}>
-            <h1>Student Course - Professor UI</h1>
+        <>
             {!auth ? (
-                <Login onLogin={setAuth} />
+                <Login onLogin={onLogin} />
             ) : (
-                <Dashboard auth={auth} onLogout={() => setAuth(null)} />
+                <DefaultLayout user={auth.user} onLogout={() => { setAuth(null); localStorage.removeItem('auth') }}>
+                    <Dashboard auth={auth} />
+                </DefaultLayout>
             )}
-        </div>
+        </>
     )
 }

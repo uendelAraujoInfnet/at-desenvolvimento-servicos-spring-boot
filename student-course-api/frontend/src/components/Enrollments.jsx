@@ -79,7 +79,7 @@ export default function Enrollments({ auth }){
 
     return (
         <div style={{border:'1px solid #ddd', padding:10, marginTop:10}}>
-            <h2>Enrollments</h2>
+            <h2>Matrículas</h2>
             <Notification message={note?.message} type={note?.type} onClose={() => setNote(null)} />
 
             <div style={{display:'flex', gap:8, alignItems:'center'}}>
